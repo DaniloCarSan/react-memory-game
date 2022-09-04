@@ -5,7 +5,7 @@ type Props = {
     value: string;
 }
 
-export const InfoItem = ({ label, value }: Props) => {
+const InfoItem = ({ label, value }: Props) => {
     return (
         <C.Container>
             <C.Label>{label}:</C.Label>
@@ -13,3 +13,5 @@ export const InfoItem = ({ label, value }: Props) => {
         </C.Container>
     );
 }
+
+export default InfoItem;
