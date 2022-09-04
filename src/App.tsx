@@ -20,6 +20,12 @@ const App = () => {
   useEffect(() => resetAndCreateGrid(), []);
 
   useEffect(() => {
+    if (moveCount > 0 && gridItems.every(item => item.permanentShown)) {
+      setPlaying(false);
+    }
+  }, [gridItems, moveCount]);
+
+  useEffect(() => {
     if (playing) {
       const timer = setInterval(() => {
 
@@ -29,6 +35,41 @@ const App = () => {
       return () => clearInterval(timer);
     }
   }, [playing, timeElepsed]);
+
+  //verificar se os card são iguais
+  useEffect(() => {
+    if (showCount === 2) {
+
+      const opened = gridItems.filter(item => item.shown);
+
+      if (opened.length === 2) {
+        if (opened[0].item === opened[1].item) {
+          let tmpGrid = [...gridItems];
+          for (let i in tmpGrid) {
+            if (tmpGrid[i].shown) {
+              tmpGrid[i].permanentShown = true;
+              tmpGrid[i].shown = false;
+            }
+          }
+          setGridItems(tmpGrid);
+          setShowCount(0);
+        } else {
+          setTimeout(() => {
+            let tmpGrid = [...gridItems];
+            for (let i in tmpGrid) {
+              if (tmpGrid[i].shown) {
+                tmpGrid[i].shown = false;
+              }
+            }
+            setGridItems(tmpGrid);
+            setShowCount(0);
+          }, 2000);
+        }
+
+        setMoveCount(moveCount => moveCount + 1);
+      }
+    }
+  }, [showCount, gridItems]);
 
   const resetAndCreateGrid = () => {
 
@@ -74,7 +115,6 @@ const App = () => {
         setShowCount(showCount + 1);
       }
 
-
       setGridItems(tmpGrid);
     }
   }
@@ -88,7 +128,7 @@ const App = () => {
 
         <C.InfoArea>
           <InfoItem label="Tempo" value={formatTimeElepsed(timeElepsed)} />
-          <InfoItem label="Movimentos" value="0" />
+          <InfoItem label="Movimentos" value={moveCount.toString()} />
         </C.InfoArea>
 
         <Button
