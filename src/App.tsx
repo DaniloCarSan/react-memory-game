@@ -7,7 +7,7 @@ import Button from './components/Button';
 import GridItem from './components/GridItem';
 import { GridItemType } from './types/GridIteType';
 import items from './data/items';
-
+import formatTimeElepsed from './helpers/formatTimeElepsed';
 
 const App = () => {
 
@@ -17,8 +17,18 @@ const App = () => {
   const [showCount, setShowCount] = useState<number>(0);
   const [gridItems, setGridItems] = useState<GridItemType[]>([]);
 
-
   useEffect(() => resetAndCreateGrid(), []);
+
+  useEffect(() => {
+    if (playing) {
+      const timer = setInterval(() => {
+
+        setTimeElepsed(timeElepsed + 1);
+
+      }, 1000);
+      return () => clearInterval(timer);
+    }
+  }, [playing, timeElepsed]);
 
   const resetAndCreateGrid = () => {
 
@@ -62,13 +72,12 @@ const App = () => {
   return (
     <C.Container>
       <C.Info>
-
         <C.LogoLink href="">
           <img src={logoImage} width="200" alt="DevMemory" />
         </C.LogoLink>
 
         <C.InfoArea>
-          <InfoItem label="Tempo" value="00:00" />
+          <InfoItem label="Tempo" value={formatTimeElepsed(timeElepsed)} />
           <InfoItem label="Movimentos" value="0" />
         </C.InfoArea>
 

@@ -1,10 +1,14 @@
 import styled from "styled-components";
 
-export const Container = styled.div`
+type ContainerProps = {
+    backgroundColor?: string;
+}
+
+export const Container = styled.div<ContainerProps>`
     width: 200px;
     height: 50px;
     display: flex;
-    background: #1550ff;
+    background-color: ${props => props.backgroundColor ?? "#1550ff"};
     border-radius: 10px;
     cursor: pointer;
     opacity: 1;
